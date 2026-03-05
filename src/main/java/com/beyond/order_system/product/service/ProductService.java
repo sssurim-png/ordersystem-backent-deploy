@@ -150,6 +150,7 @@ public class ProductService {
                 String imgUrl=product.getImage_path();
                 String fileName=imgUrl.substring(imgUrl.lastIndexOf("/")+1);
                 s3Client.deleteObject(a->a.bucket(bucket).key(fileName));
+                System.out.println(".");
             }
         }
     }
