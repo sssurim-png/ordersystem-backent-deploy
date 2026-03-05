@@ -1,4 +1,4 @@
-ame: deploy to ec2 with jar
+name: deploy to ec2 with jar
 
 on:
   push:
