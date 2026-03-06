@@ -6,10 +6,10 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://database-2.cpoka082qt1p.ap-northeast-2.rds.amazonaws.com:3306/ordersystem?useSSL=true
+    url: jdbc:mariadb://xxxx:3306/ordersystem?useSSL=true
 #    빌드하는 시점에 덮어쓰겠다
-    username: admin
-    password: rfsyr2tNk2pClacWSu7A
+    username: xxxx
+    password: xxxx
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MariaDBDialect
