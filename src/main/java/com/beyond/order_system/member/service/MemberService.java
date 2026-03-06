@@ -55,11 +55,13 @@ public class MemberService {
     public MemberMyInfoDto findMyInfo() {
         String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Member member=memberRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException("다시 시도해주세요."));
+        System.out.println(".");
         return MemberMyInfoDto.fromEntity(member);
     }
 
     public MemberDetailDto findById(Long id) {
         Member member=memberRepository.findById(id).orElseThrow(()->new EntityNotFoundException("없는 회원입니다."));
         return MemberDetailDto.fromEntity(member);
+
     }
 }
