@@ -46,7 +46,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/health",
-
+                        "http://www.rim2379.store",
                         "/swagger-ui.html").permitAll().anyRequest().authenticated())
                 .build();
     }
