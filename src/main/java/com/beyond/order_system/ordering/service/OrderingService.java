@@ -1,16 +1,11 @@
 package com.beyond.order_system.ordering.service;
 
-import com.beyond.order_system.common.service.RabbitMqStockService;
 import com.beyond.order_system.common.service.SseAlarmService;
 import com.beyond.order_system.member.domain.Member;
 import com.beyond.order_system.member.repository.MemberRepository;
-import com.beyond.order_system.member.service.MemberService;
 import com.beyond.order_system.ordering.domain.Ordering;
 import com.beyond.order_system.ordering.domain.OrderingDetails;
-import com.beyond.order_system.ordering.domain.Status;
-import com.beyond.order_system.ordering.dtos.MyOrderingListDto;
 import com.beyond.order_system.ordering.dtos.OrderingCreateDto;
-import com.beyond.order_system.ordering.dtos.OrderingDetailsListDto;
 import com.beyond.order_system.ordering.dtos.OrderingListDto;
 import com.beyond.order_system.ordering.repository.OrderingDetailsRepository;
 import com.beyond.order_system.ordering.repository.OrderingRepository;
@@ -21,11 +16,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,7 +30,7 @@ public class OrderingService {
     private final SseAlarmService sseAlarmService;
     private final RedisTemplate<String, String> redisTemplate;
 
-    public OrderingService(OrderingDetailsRepository orderingDetailsRepository, OrderingRepository orderingRepository, MemberRepository memberRepository, ProductRepository productRepository, SseAlarmService sseAlarmService, @Qualifier("stockInventory") RedisTemplate<String, String> redisTemplate, RabbitMqStockService rabbitMqStockService) {
+    public OrderingService(OrderingDetailsRepository orderingDetailsRepository, OrderingRepository orderingRepository, MemberRepository memberRepository, ProductRepository productRepository, SseAlarmService sseAlarmService, @Qualifier("stockInventory") RedisTemplate<String, String> redisTemplate) {
         this.orderingDetailsRepository = orderingDetailsRepository;
         this.orderingRepository = orderingRepository;
         this.memberRepository = memberRepository;

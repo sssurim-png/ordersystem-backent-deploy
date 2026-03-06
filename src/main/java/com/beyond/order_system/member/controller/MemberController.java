@@ -30,6 +30,7 @@ public class MemberController {
             summary = "회원가입", description = "이메일, 비밀번호를 통한 회원가입 "
     )
     public Long create(@RequestBody @Valid MemberCreateDto dto) {
+        System.out.println("회원가입 테스트");
         return memberService.save(dto);
     }
 
