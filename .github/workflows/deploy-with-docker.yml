@@ -41,19 +41,12 @@ jobs:
 
             fi
             sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
-
             sudo docker pull ss19990222/myordersystem2:latest
-
             sudo docker rm -f myspring || true
-
             sudo docker run -d --name myspring  -p 8080:8080 \
-
             -e SPRING_REDIS_HOST=${{ secrets.REDIS_HOST }} \
-
-
             -e SPRING_DATASOURCE_URL=jdbc:mariadb://${{ secrets.DB_HOST }}:3306/ordersystem?useSSL=true \
             -e SPRING_DATASOURCE_USERNAME=admin \
-
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PW }} ss19990222/myordersystem2:latest
 
 
