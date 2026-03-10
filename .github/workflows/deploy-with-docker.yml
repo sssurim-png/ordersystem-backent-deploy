@@ -1,0 +1,66 @@
+name: Deploy to Ec2 With Docker
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+#      - 깃허브에서 가상pc로 코드 클론떠온 것
+      - uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        working-directory: .
+#        기본으로 도커를 깔아줌(본인이름 변경)
+        run: docker build -t ss19990222/myordersystem2:latest .
+
+#     도커허브 로그인 할수 있게 (비밀번호 지정해줘야한다)
+      - name: DockerHub Login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+#     2.push 본인이름 push변경
+      - name: Push Docker Image to DockerHub
+        run: docker push ss19990222/myordersystem2:latest
+#     3. ec2로그인 ec2에 ssh로 로그인 (host, pem key정보 넣기)
+      - name: instance1 ec2 ssh login and docker run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST1 }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PEMKEY }}
+
+          script: |
+#           도커 없으면 도커 설치 하겠다.
+            if ! type docker > /dev/null ; then
+              export DEBIAN_FRONTEND=noninteractive
+              curl -fsSL https://get.docker.com | bash
+#            이미지가 private인경우 도커 로그인 필요하다
+            fi
+            sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+#            이미지 pull(run하면 바로 땡겨와지지만, 로컬에 이미지 잇을경우 안땡겨오니가 수동으로 pull설정)(이름변경)
+            sudo docker pull ss19990222/myordersystem2:latest
+#                    기존 컨테이너 삭제(이름 변경)
+            sudo docker rm -f myspring || true
+#            실행(이름변경)
+            sudo docker run -d --name myspring  -p 8080:8080 \
+#                    redis
+            -e SPRING_REDIS_HOST=${{ secrets.REDIS_HOST }} \
+#                    jwt토큰 쓸거면 환경변수호 해서 값넣기(지금에서 값넣기)
+#            -e JWT_SECRETKEYAT=${{ secrets.AT_SECRET_KEY }} \
+#            -e JWT_SECRETKEYRT=${{ secrets.RT_SECRET_KEY }} \
+#                    db useSSL=true필요
+            -e SPRING_DATASOURCE_URL=jdbc:mariadb://${{ secrets.DB_HOST }}:3306/ordersystem?useSSL=true \
+            -e SPRING_DATASOURCE_USERNAME=admin \
+#                    이미지명(이름변경)
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PW }} ss19990222/myordersystem2:latest
+
+#            github에 등록해야될것들
+#           원래 db 2개ㅐ redis도 넣어야되는데 지금은 생략
+#  DOCKER_USERNAME
+#  DOCKER_PASSWORD
+#  EC2_HOST1
+#  EC2_PEMKEY

@@ -6,7 +6,7 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3309/ordersystem
+    url: jdbc:mariadb://localhost:3306/ordersystem
     username: root
     password: test1234
   jpa:
@@ -14,7 +14,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show_sql: true
 
   servlet:
